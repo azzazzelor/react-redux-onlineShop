@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Router from './Router'
+import { NavLink } from 'react-router-dom'
+import {connect} from 'react-redux'
+import Footer from './features/footer/footer'
+import Header from './pages/header'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const Navigation = ({cart}) => <nav>
+  <ul className = "top-menu">
+    <li><NavLink to ='/'>Home</NavLink></li>
+    <li><NavLink to ='/cart'>Cart ({ cart.reduce((acc,item)=>{
+      return acc + item.quantity
+    },0)})</NavLink></li>
+      <li><NavLink to='/checkout'>Check out</NavLink></li>
+  </ul>
+
+</nav>
+
+class App extends Component {
+  render() {
+    return (
+         <div className = 'page-container' >
+         {/* <Header/> */}
+         <Navigation { ...this.props }/>  
+      
+         <Router/>
+         <Footer/>
+       </div>
+
+    );
+  }
 }
 
-export default App;
+function  mapStateToProps (state){
+  return{
+    cart: state.cart
+  }
+}
+
+export default connect(mapStateToProps)(App)
